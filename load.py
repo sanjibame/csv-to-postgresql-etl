@@ -2,7 +2,7 @@ import sqlite3
 
 def load_data(data):
     # Connect to SQLite database
-    conn = sqlite3.connect("sales.db")
+    conn = sqlite3.connect("DB_NAME")
 
     # Create cursor object
     cursor = conn.cursor()
