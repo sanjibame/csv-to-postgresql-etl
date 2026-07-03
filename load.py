@@ -1,34 +1,46 @@
-import psycopg2
-from config import *
+import sqlite3
 
 def load_data(data):
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        port=DB_PORT
-    )
+    # Connect to SQLite database
+    conn = sqlite3.connect("sales.db")
+
+    # Create cursor object
     cursor = conn.cursor()
 
+    # Create table if it does not exist
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS sales (
             order_id INTEGER,
-            customer_name VARCHAR(100),
-            product VARCHAR(100),
+            customer_name TEXT,
+            product TEXT,
             quantity INTEGER,
-            price NUMERIC,
-            total_amount NUMERIC
+            price REAL,
+            total_amount REAL
         )
     """)
 
+    # Insert data into the table
     for _, row in data.iterrows():
         cursor.execute(
-            "INSERT INTO sales VALUES (%s,%s,%s,%s,%s,%s)",
-            (row["order_id"], row["customer_name"], row["product"],
-             row["quantity"], row["price"], row["total_amount"])
+            """
+            INSERT INTO sales
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                row["order_id"],
+                row["customer_name"],
+                row["product"],
+                row["quantity"],
+                row["price"],
+                row["total_amount"]
+            )
         )
 
+    # Save changes
     conn.commit()
+
+    # Close connection
     cursor.close()
     conn.close()
+
+    print("Data loaded successfully into sales.db")
