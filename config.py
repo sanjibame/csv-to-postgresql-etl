@@ -1,5 +1,5 @@
 DB_HOST = "localhost"
-DB_NAME = "sales_db"
+DB_NAME = "sales.db"
 DB_USER = "postgres"
 DB_PASSWORD = "password"
 DB_PORT = "5432"
