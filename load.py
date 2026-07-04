@@ -1,30 +1,22 @@
-import sqlite3
+import psycopg2
+from config import *
 
 def load_data(data):
-    # Connect to SQLite database
-    conn = sqlite3.connect("DB_NAME")
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        port=DB_PORT
+    )
 
-    # Create cursor object
     cursor = conn.cursor()
 
-    # Create table if it does not exist
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS sales (
-            order_id INTEGER,
-            customer_name TEXT,
-            product TEXT,
-            quantity INTEGER,
-            price REAL,
-            total_amount REAL
-        )
-    """)
-
-    # Insert data into the table
     for _, row in data.iterrows():
         cursor.execute(
             """
             INSERT INTO sales
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s,%s,%s,%s,%s,%s)
             """,
             (
                 row["order_id"],
@@ -36,11 +28,8 @@ def load_data(data):
             )
         )
 
-    # Save changes
     conn.commit()
-
-    # Close connection
     cursor.close()
     conn.close()
 
-    print("Data loaded successfully into sales.db")
+    print("Data loaded into Supabase PostgreSQL successfully.")
