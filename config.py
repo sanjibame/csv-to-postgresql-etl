@@ -1,5 +1,5 @@
-DB_HOST = "localhost"
-DB_NAME = "sales.db"
+DB_HOST = "db.yhfqfpwfdihxvimhvlhs.supabase.co"
+DB_NAME = "postgres"
 DB_USER = "postgres"
-DB_PASSWORD = "password"
+DB_PASSWORD = "Philosanjib123$"
 DB_PORT = "5432"
